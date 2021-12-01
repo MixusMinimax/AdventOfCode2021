@@ -7,7 +7,6 @@ public class Day01 : IDay
         string path = Guard.Against.NullOrEmpty(args, nameof(args)).First();
         Guard.Against.AgainstExpression(e => File.Exists(e.path), (path, 0), "File doesn't exist!");
 
-
         var numbers = (
             from entry in
                 from line in File.ReadLines(path)
