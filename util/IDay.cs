@@ -1,4 +1,4 @@
 public interface IDay
 {
-    public Task Run(string[] args);
+    public IList<Func<string[], Task>> Steps { get; }
 }
