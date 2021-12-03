@@ -1,4 +1,6 @@
-using Ardalis.GuardClauses;
+using advent_of_code.util;
+
+namespace advent_of_code.days;
 
 public class Day01 : IDay
 {
@@ -6,22 +8,7 @@ public class Day01 : IDay
 
     public Day01()
     {
-        Steps = new List<Action<string>>() { StepOne, StepTwo }.Select(
-            e => async (string[] args) =>
-            {
-                var path = GetPath(ref args);
-                e(path);
-                await Task.CompletedTask;
-            }
-        ).ToList();
-    }
-
-    private static string GetPath(ref string[] args)
-    {
-        string path = Guard.Against.NullOrEmpty(args, nameof(args)).First();
-        Guard.Against.AgainstExpression(e => File.Exists(e.path), (path, 0), "File doesn't exist!");
-        args = args.Skip(1).ToArray();
-        return path;
+        Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
 
     private static IList<int> GetNumbers(string path)

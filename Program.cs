@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using advent_of_code.util;
+using Ardalis.GuardClauses;
 
 var day = typeof(IDay)
     .Assembly
