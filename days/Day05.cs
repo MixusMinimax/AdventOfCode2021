@@ -25,12 +25,7 @@ public class Day05 : IDay
 
         private int this[int x, int y]
         {
-            get
-            {
-                if (_values.ContainsKey(x)) return _values[x].ContainsKey(y) ? _values[x][y] : 0;
-                _values[x] = new Dictionary<int, int>();
-                return 0;
-            }
+            get => _values.ContainsKey(x) && _values[x].ContainsKey(y) ? _values[x][y] : 0;
             set
             {
                 Size = new Coordinate
