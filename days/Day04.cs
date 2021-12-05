@@ -12,14 +12,12 @@ public class Day04 : IDay
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
 
-    private record struct Coordinate(int X, int Y);
-
     private class Board
     {
         private readonly Dictionary<int, (bool IsMarked, Coordinate Coordinate)> _values;
         private readonly int[] _columnCounts = new int[5];
         private readonly int[] _rowCounts = new int[5];
-        private bool _alreadyWon = false;
+        private bool _alreadyWon;
 
         public Board(Dictionary<int, (bool IsMarked, Coordinate Coordinate)> values)
         {
@@ -44,7 +42,7 @@ public class Day04 : IDay
             _columnCounts[x]++;
             _rowCounts[y]++;
 
-            var won =  _columnCounts.Any(i => i == 5) || _rowCounts.Any(i => i == 5);
+            var won = _columnCounts.Any(i => i == 5) || _rowCounts.Any(i => i == 5);
             _alreadyWon = won;
             return won;
         }

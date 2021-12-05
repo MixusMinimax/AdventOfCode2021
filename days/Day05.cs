@@ -15,24 +15,23 @@ public class Day05 : IDay
         );
     }
 
-    private record struct Coordinate(int X, int Y);
-
     private class Map
     {
         private readonly Dictionary<int, Dictionary<int, int>> _values = new();
+        private Coordinate _size;
+
         public int HighPoints { get; private set; }
-        private Coordinate Size { get; set; }
 
         private int this[int x, int y]
         {
             get => _values.ContainsKey(x) && _values[x].ContainsKey(y) ? _values[x][y] : 0;
             set
             {
-                Size = new Coordinate
-                {
-                    X = Math.Max(Size.X, x + 1),
-                    Y = Math.Max(Size.Y, y + 1)
-                };
+                _size = new Coordinate
+                (
+                    X: Math.Max(_size.X, x + 1),
+                    Y: Math.Max(_size.Y, y + 1)
+                );
                 if (!_values.ContainsKey(x)) _values[x] = new Dictionary<int, int>();
                 _values[x][y] = value;
             }
@@ -51,45 +50,37 @@ public class Day05 : IDay
             {
                 var (y, b) = (Math.Min(from.Y, to.Y), Math.Max(from.Y, to.Y));
                 for (; y <= b; ++y)
-                {
                     MarkCell(from.X, y);
-                }
             }
             else if (from.Y == to.Y)
             {
                 var (x, b) = (Math.Min(from.X, to.X), Math.Max(from.X, to.X));
                 for (; x <= b; ++x)
-                {
                     MarkCell(x, from.Y);
-                }
             }
             else if (includeDiagonals && to.X - from.X == to.Y - from.Y)
             {
                 if (from.X > to.X) Common.Swap(ref from, ref to);
                 for (var (x, y) = from; x <= to.X; ++x, ++y)
-                {
                     MarkCell(x, y);
-                }
             }
             else if (includeDiagonals && to.X - from.X == from.Y - to.Y)
             {
                 if (from.X > to.X) Common.Swap(ref from, ref to);
                 for (var (x, y) = from; x <= to.X; ++x, --y)
-                {
                     MarkCell(x, y);
-                }
             }
         }
 
         public override string ToString()
         {
-            if (Size.X > 20 || Size.Y > 20)
+            if (_size.X > 20 || _size.Y > 20)
                 return "Too big to print!";
             StringBuilder result = new();
-            for (var y = 0; y < Size.Y; ++y)
+            for (var y = 0; y < _size.Y; ++y)
             {
                 if (y != 0) result.Append('\n');
-                for (var x = 0; x < Size.X; ++x)
+                for (var x = 0; x < _size.X; ++x)
                 {
                     var num = this[x, y];
                     result.Append(num != 0 ? num.ToString() : ".");
@@ -102,7 +93,8 @@ public class Day05 : IDay
 
     private static IEnumerable<(Coordinate From, Coordinate To)> GetLines(string path)
     {
-        return File.ReadLines(path)
+        return File
+            .ReadLines(path)
             .Select(e => e.Split("->")
                 .Select(x => x.Trim())
                 .Select(x => x.Split(',')
@@ -124,10 +116,8 @@ public class Day05 : IDay
             map.MarkLine(from, to, includeDiagonals);
         }
 
-        Console.WriteLine("Done! Resulting map:");
-        Console.WriteLine();
+        Console.WriteLine("Done! Resulting map:\n");
         Console.WriteLine(map);
-        Console.WriteLine();
-        Console.WriteLine($"Number of high points: {map.HighPoints}");
+        Console.WriteLine($"\nNumber of high points: {map.HighPoints}");
     }
 }

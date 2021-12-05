@@ -29,3 +29,5 @@ public static class Common
         (a, b) = (b, a);
     }
 }
+
+public record struct Coordinate(int X, int Y);

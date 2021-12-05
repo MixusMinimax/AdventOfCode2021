@@ -12,32 +12,31 @@ public class Day02 : IDay
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
 
-    record struct Instruction(bool Horizontal, bool Positive, int Amount = 0);
+    private record struct Instruction(bool Horizontal, bool Positive, int Amount = 0);
 
-    record struct Position(int forward = 0, int down = 0, int aim = 0)
+    private readonly record struct Position(int Forward = 0, int Down = 0, int Aim = 0)
     {
         public Position ApplyInstructionA(in Instruction i)
         {
             var sign = i.Positive ? 1 : -1;
             return i.Horizontal
-                ? new Position(forward + sign * i.Amount, down)
-                : new Position(forward, down + sign * i.Amount);
+                ? new Position(Forward + sign * i.Amount, Down)
+                : new Position(Forward, Down + sign * i.Amount);
         }
 
         public Position ApplyInstructionB(in Instruction i)
         {
             var sign = i.Positive ? 1 : -1;
             return i.Horizontal
-                ? new Position(forward + sign * i.Amount, down + sign * i.Amount * aim, aim)
-                : new Position(forward, down, aim + sign * i.Amount);
+                ? new Position(Forward + sign * i.Amount, Down + sign * i.Amount * Aim, Aim)
+                : new Position(Forward, Down, Aim + sign * i.Amount);
         }
     }
 
-    class ParseException : Exception
+    private class ParseException : Exception
     {
         public ParseException(string message) : base($"Parse Error: [{message}]")
         {
-
         }
     }
 
@@ -48,16 +47,19 @@ public class Day02 : IDay
             var words = line.Split(' ');
             Guard.Against.AgainstExpression(e => e.words.Length >= 2, (words, 0), nameof(words));
             int amount = 0;
-            Guard.Against.AgainstExpression(e => int.TryParse(e.Item1, out amount), (words[1], 0), $"{nameof(words)}[1]");
+            Guard.Against.AgainstExpression(e => int.TryParse(e.Item1, out amount), (words[1], 0),
+                $"{nameof(words)}[1]");
             var result = words[0] switch
-            {
-                "forward" => new Instruction(Horizontal: true, Positive: true),
-                "backward" => new Instruction(Horizontal: true, Positive: false),
-                "down" => new Instruction(Horizontal: false, Positive: true),
-                "up" => new Instruction(Horizontal: false, Positive: false),
-                _ => throw new ParseException(line)
-            } with
-            { Amount = amount };
+                {
+                    "forward" => new Instruction(Horizontal: true, Positive: true),
+                    "backward" => new Instruction(Horizontal: true, Positive: false),
+                    "down" => new Instruction(Horizontal: false, Positive: true),
+                    "up" => new Instruction(Horizontal: false, Positive: false),
+                    _ => throw new ParseException(line)
+                } with
+                {
+                    Amount = amount
+                };
             return result;
         });
     }
@@ -66,13 +68,13 @@ public class Day02 : IDay
     {
         Console.WriteLine("Step One: Parsing and aggregating input...");
         var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionA(b));
-        Console.WriteLine($"Done! {pos}, Result: {pos.forward * pos.down}");
+        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
     }
 
     private void StepTwo(string path)
     {
         Console.WriteLine("Step Two: Parsing and aggregating input...");
         var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionB(b));
-        Console.WriteLine($"Done! {pos}, Result: {pos.forward * pos.down}");
+        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
     }
 }
