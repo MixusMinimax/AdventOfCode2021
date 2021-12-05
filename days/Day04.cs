@@ -105,7 +105,7 @@ public class Day04 : IDay
                     .Skip(1)
                     .Select(line => line
                         .Split(' ')
-                        .Where(e => !string.IsNullOrWhiteSpace(e))
+                        .Where(e => !string.IsNullOrEmpty(e))
                         .TryParseInt()
                         .ToArray()
                     ).ToArray();
@@ -144,11 +144,9 @@ public class Day04 : IDay
             select (number, board)
         ).First();
 
-        Console.WriteLine("Done! Winning Board:");
-        Console.WriteLine();
+        Console.WriteLine("Done! Winning Board:\n");
         Console.WriteLine(winner);
-        Console.WriteLine();
-        Console.WriteLine($"Final Score: {winner.GetScore(lastNumber)}");
+        Console.WriteLine($"\nFinal Score: {winner.GetScore(lastNumber)}");
     }
 
     private static void StepTwo(string path)
@@ -165,10 +163,8 @@ public class Day04 : IDay
             select (number, board)
         ).Take(boards.Count).Last();
 
-        Console.WriteLine("Done! Losing Board:");
-        Console.WriteLine();
+        Console.WriteLine("Done! Losing Board:\n");
         Console.WriteLine(loser);
-        Console.WriteLine();
-        Console.WriteLine($"Final Score: {loser.GetScore(lastNumber)}");
+        Console.WriteLine($"\nFinal Score: {loser.GetScore(lastNumber)}");
     }
 }
