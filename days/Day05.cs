@@ -15,9 +15,9 @@ public class Day05 : IDay
         );
     }
 
-    record struct Coordinate(int X, int Y);
+    private record struct Coordinate(int X, int Y);
 
-    class Map
+    private class Map
     {
         private readonly Dictionary<int, Dictionary<int, int>> _values = new();
         public int HighPoints { get; private set; }
