@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 using advent_of_code.util;
 
 namespace advent_of_code.days;
@@ -34,7 +33,7 @@ public class Day05 : IDay
             }
             set
             {
-                Size = Size with
+                Size = new Coordinate
                 {
                     X = Math.Max(Size.X, x + 1),
                     Y = Math.Max(Size.Y, y + 1)
@@ -50,7 +49,7 @@ public class Day05 : IDay
             if (curr == 1) HighPoints++;
             this[x, y] = curr + 1;
         }
-        
+
         public void MarkLine(Coordinate from, Coordinate to, bool includeDiagonals = false)
         {
             if (from.X == to.X)
