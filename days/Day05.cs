@@ -51,7 +51,7 @@ public class Day05 : IDay
             this[x, y] = curr + 1;
         }
         
-        public void MarkLine(Coordinate from, Coordinate to, bool includeDiagonal = false)
+        public void MarkLine(Coordinate from, Coordinate to, bool includeDiagonals = false)
         {
             if (from.X == to.X)
             {
@@ -69,7 +69,7 @@ public class Day05 : IDay
                     MarkCell(x, from.Y);
                 }
             }
-            else if (includeDiagonal && to.X - from.X == to.Y - from.Y)
+            else if (includeDiagonals && to.X - from.X == to.Y - from.Y)
             {
                 if (from.X > to.X) Common.Swap(ref from, ref to);
                 for (var (x, y) = from; x <= to.X; ++x, ++y)
@@ -77,7 +77,7 @@ public class Day05 : IDay
                     MarkCell(x, y);
                 }
             }
-            else if (includeDiagonal && to.X - from.X == from.Y - to.Y)
+            else if (includeDiagonals && to.X - from.X == from.Y - to.Y)
             {
                 if (from.X > to.X) Common.Swap(ref from, ref to);
                 for (var (x, y) = from; x <= to.X; ++x, --y)
