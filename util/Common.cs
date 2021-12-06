@@ -23,6 +23,18 @@ public static class Common
             }
         ).ToList();
     }
+    
+    public static IList<Func<string[], Task>> CreateFileSteps(params Action<string, string[]>[] functions)
+    {
+        return functions.Select(
+            e => async (string[] args) =>
+            {
+                var path = Common.GetPath(ref args);
+                e(path, args);
+                await Task.CompletedTask;
+            }
+        ).ToList();
+    }
 
     public static void Swap<T>(ref T a, ref T b)
     {
