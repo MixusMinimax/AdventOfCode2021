@@ -9,7 +9,7 @@ public static class Extensions
         return bits
             .Aggregate(0, (a, b) => (a << 1) | (b ? 1 : 0));
     }
-    
+
     public static IEnumerable<TResult> SelectWhere<TSource, TResult>(
         this IEnumerable<TSource> enumerable,
         SelectWhereDelegate<TSource, TResult> func)
@@ -23,6 +23,11 @@ public static class Extensions
     public static IEnumerable<int> TryParseInt(this IEnumerable<string> enumerable)
     {
         return enumerable.SelectWhere<string, int>(int.TryParse);
+    }
+
+    public static IEnumerable<int> SplitNumbers(this string line, char delimiter = ',')
+    {
+        return line.Split(delimiter).TryParseInt();
     }
 
     public delegate bool SelectWhereDelegate<in TFrom, TTo>(TFrom from, out TTo to);
