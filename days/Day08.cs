@@ -68,15 +68,18 @@ public class Day08 : IDay
             var permutation = FunctionalPermutations(allLetters, allLetters.Length)
                 .Select(letters =>
                     string.Concat(letters)
-                ).First(perm => words.Select(word =>
-                    word.Select(letter => allLetters[perm.IndexOf(letter)])
-                ).Select(word => string.Concat(word.OrderBy(y => y))).All(word => ParseDigit(word) != -1));
+                ).First(perm => words
+                    .Select(word => string.Concat(
+                        word.Select(letter => allLetters[perm.IndexOf(letter)])
+                            .OrderBy(y => y)))
+                    .All(word => ParseDigit(word) != -1)
+                );
 
-
-            return line[1].Select(word =>
-                    word.Select(letter => allLetters[permutation.IndexOf(letter)])
-                )
-                .Select(word => word.OrderBy(y => y)).Select(x => string.Concat(x))
+            return line[1]
+                .Select(word => word
+                    .Select(letter => allLetters[permutation.IndexOf(letter)]))
+                .Select(word => word
+                    .OrderBy(y => y)).Select(x => string.Concat(x))
                 .Select(ParseDigit)
                 .Aggregate(0, (a, b) => a * 10 + b);
         }).Sum();
