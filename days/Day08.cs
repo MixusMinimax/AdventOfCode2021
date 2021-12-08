@@ -96,6 +96,3 @@ public class Day08 : IDay
                 .Select(subEi => new[] { elementI }.Concat(subEi)));
     }
 }
-
-// 089 76762423
-// 089 76760
