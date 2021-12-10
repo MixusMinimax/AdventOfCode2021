@@ -7,7 +7,7 @@ public static class Common
     public static string GetPath(ref string[] args)
     {
         var path = Guard.Against.NullOrEmpty(args, nameof(args)).First();
-        Guard.Against.AgainstExpression(e => File.Exists(e.path), (path, 0), "File doesn't exist!");
+        Guard.Against.AgainstExpression(e => File.Exists(e.path), (path, 0), $"File doesn't exist! ({Path.GetFullPath(path)})");
         args = args.Skip(1).ToArray();
         return path;
     }

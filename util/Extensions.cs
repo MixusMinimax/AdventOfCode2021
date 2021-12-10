@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace advent_of_code.util;
+﻿namespace advent_of_code.util;
 
 public static class Extensions
 {
@@ -28,6 +26,38 @@ public static class Extensions
     public static IEnumerable<int> SplitNumbers(this string line, char delimiter = ',')
     {
         return line.Split(delimiter).TryParseInt();
+    }
+
+    public static double Mean(this IEnumerable<int> numbers)
+    {
+        return numbers.ToArray().Mean();
+    }
+
+    public static double Mean(this IReadOnlyList<int> numbers)
+    {
+        return numbers.ToArray().Mean(numbers.Count);
+    }
+
+    public static double Mean(this IEnumerable<int> numbers, int count)
+    {
+        var enumerated = numbers.OrderBy(e => e).Take(count / 2 + 1).ToArray();
+        return count == 0 ? 0 : count % 2 == 1 ? enumerated[^1] : (enumerated[^2] + enumerated[^1]) / 2.0;
+    }
+    
+    public static double Mean(this IEnumerable<long> numbers)
+    {
+        return numbers.ToArray().Mean();
+    }
+
+    public static double Mean(this IReadOnlyList<long> numbers)
+    {
+        return numbers.ToArray().Mean(numbers.Count);
+    }
+
+    public static double Mean(this IEnumerable<long> numbers, int count)
+    {
+        var enumerated = numbers.OrderBy(e => e).Take(count / 2 + 1).ToArray();
+        return count == 0 ? 0 : count % 2 == 1 ? enumerated[^1] : (enumerated[^2] + enumerated[^1]) / 2.0;
     }
 
     public delegate bool SelectWhereDelegate<in TFrom, TTo>(TFrom from, out TTo to);
