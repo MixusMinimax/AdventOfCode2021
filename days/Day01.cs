@@ -1,15 +1,17 @@
 using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day01 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day01()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static IList<int> GetNumbers(string path)
     {

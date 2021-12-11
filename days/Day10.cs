@@ -1,24 +1,12 @@
 ﻿using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day10 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
-    public Day10()
-    {
-        Steps = Common.CreateFileSteps(StepOne, StepTwo);
-    }
-
-    private enum ChunkType
-    {
-        Correct,
-        Incomplete,
-        Corrupted
-    }
-
-    private static Dictionary<char, char> _characters = new()
+    private static readonly Dictionary<char, char> _characters = new()
     {
         { '(', ')' },
         { '[', ']' },
@@ -26,7 +14,7 @@ public class Day10 : IDay
         { '<', '>' }
     };
 
-    private static Dictionary<char, (int ScoreA, int ScoreB)> _scores = new()
+    private static readonly Dictionary<char, (int ScoreA, int ScoreB)> _scores = new()
     {
         { ')', (3, 1) },
         { ']', (57, 2) },
@@ -34,16 +22,12 @@ public class Day10 : IDay
         { '>', (25137, 4) }
     };
 
-
-    private readonly struct Frame
+    public Day10()
     {
-        public char OpeningChar { get; init; }
-
-        public char GetClosingChar() => _characters
-            .TryGetValue(OpeningChar, out var res)
-            ? res
-            : '\0';
+        Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static (ChunkType ChunkType, char? IncorrectCharacter, Stack<Frame> Stack) ParseChunk(string chunk)
     {
@@ -56,10 +40,7 @@ public class Day10 : IDay
                 continue;
             }
 
-            if (!_characters.ContainsKey(c))
-            {
-                return (ChunkType.Corrupted, c, stack);
-            }
+            if (!_characters.ContainsKey(c)) return (ChunkType.Corrupted, c, stack);
 
             stack.Push(new Frame { OpeningChar = c });
         }
@@ -91,5 +72,26 @@ public class Day10 : IDay
         }).Where(e => e != 0L).Mean();
 
         Console.WriteLine($"Done! Final Score: {score}");
+    }
+
+    private enum ChunkType
+    {
+        Correct,
+        Incomplete,
+        Corrupted
+    }
+
+
+    private readonly struct Frame
+    {
+        public char OpeningChar { get; init; }
+
+        public char GetClosingChar()
+        {
+            return _characters
+                .TryGetValue(OpeningChar, out var res)
+                ? res
+                : '\0';
+        }
     }
 }

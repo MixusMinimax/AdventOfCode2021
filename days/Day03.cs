@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day03 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day03()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static IList<BitArray> GetNumbers(string path)
     {
@@ -24,10 +26,7 @@ public class Day03 : IDay
         var (bitCounts, length) = numbers
             .Aggregate((BitCounts: new int[64], Length: 0), (a, b) =>
             {
-                for (var i = 0; i < b.Length; ++i)
-                {
-                    a.BitCounts[i] += b[b.Length - i - 1] ? 1 : 0;
-                }
+                for (var i = 0; i < b.Length; ++i) a.BitCounts[i] += b[b.Length - i - 1] ? 1 : 0;
 
                 a.Length = Math.Max(a.Length, b.Length);
                 return a;

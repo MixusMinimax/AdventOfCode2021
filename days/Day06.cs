@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using advent_of_code.util;
+﻿using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day06 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day06()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo, StepThree);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static string NumbersToString(IEnumerable<int> numbers, int maxLength = 64, string overflow = "...")
     {
@@ -38,10 +39,8 @@ public class Day06 : IDay
             numbers.AddRange(Enumerable.Repeat(8, zeroes));
 
             if (day == days || day == 1 || days / 20 == 0 || day % (days / 20) == 0)
-            {
                 Console.WriteLine(
                     @$"After {day.ToString().PadLeft(2, ' ')} {(day == 1 ? "day" : "days")}: {(day == 1 ? " " : "")}{NumbersToString(numbers, maxLength)}");
-            }
         }
 
         Console.WriteLine($"After {days.ToString().PadLeft(2, ' ')} days, there are {numbers.Count} lanternfish.");
@@ -66,28 +65,24 @@ public class Day06 : IDay
 
             simulation.AddRange(Enumerable.Repeat(8, zeroes));
 
-            if (day >= days)
-            {
-                results[day - days] = simulation.Count;
-            }
+            if (day >= days) results[day - days] = simulation.Count;
 
             if (day == days || day == 1 || days / 20 == 0 || day % (days / 20) == 0)
-            {
-                Console.WriteLine($"After {day.ToString().PadLeft(2, ' ')} {(day == 1 ? "day" : "days")}, there are {simulation.Count} lanternfish.");
-            }
+                Console.WriteLine(
+                    $"After {day.ToString().PadLeft(2, ' ')} {(day == 1 ? "day" : "days")}, there are {simulation.Count} lanternfish.");
         }
 
         var count = numbers.Select(e => results[6 - e]).Sum();
 
         Console.WriteLine($"After {days} {(days == 1 ? "day" : "days")}, there are {count} lanternfish.");
     }
-    
+
     private static void StepThree(string path, string[] args)
     {
         var numbers = File.ReadLines(path).FirstOrDefault("").Split(',').TryParseInt().ToList();
         var days = args.TryParseInt().FirstOrDefault(18);
         var maxLength = Console.WindowWidth - "After XX days: ".Length;
-        
+
         Console.WriteLine($"Initial state: {NumbersToString(numbers, maxLength)}");
 
         var simulation = new long[10];
@@ -99,17 +94,11 @@ public class Day06 : IDay
         {
             simulation[9] = simulation[0];
             simulation[7] += simulation[0];
-            for (var i = 0; i < simulation.Length - 1; ++i)
-            {
-                simulation[i] = simulation[i + 1];
-            }
+            for (var i = 0; i < simulation.Length - 1; ++i) simulation[i] = simulation[i + 1];
 
             simulation[9] = 0;
 
-            if (day >= days)
-            {
-                results[day - days] = simulation.Sum();
-            }
+            if (day >= days) results[day - days] = simulation.Sum();
         }
 
         var count = numbers.Select(e => results[6 - e]).Sum();

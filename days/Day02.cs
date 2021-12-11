@@ -1,15 +1,55 @@
 ﻿using advent_of_code.util;
 using Ardalis.GuardClauses;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day02 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day02()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
+    }
+
+    public IList<Func<string[], Task>> Steps { get; }
+
+    private static IEnumerable<Instruction> GetInstructions(string path)
+    {
+        return File.ReadLines(path).Select(line =>
+        {
+            var words = line.Split(' ');
+            Guard.Against.AgainstExpression(e => e.words.Length >= 2, (words, 0), nameof(words));
+            var amount = 0;
+            Guard.Against.AgainstExpression(e => int.TryParse(e.Item1, out amount), (words[1], 0),
+                $"{nameof(words)}[1]");
+            var result = words[0] switch
+                {
+                    "forward" => new Instruction(true, true),
+                    "backward" => new Instruction(true, false),
+                    "down" => new Instruction(false, true),
+                    "up" => new Instruction(false, false),
+                    _ => throw new ParseException(line)
+                } with
+                {
+                    Amount = amount
+                };
+            return result;
+        });
+    }
+
+    private void StepOne(string path)
+    {
+        Console.WriteLine("Step One: Parsing and aggregating input...");
+        var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionA(b));
+        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
+    }
+
+    private void StepTwo(string path)
+    {
+        Console.WriteLine("Step Two: Parsing and aggregating input...");
+        var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionB(b));
+        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
     }
 
     private record struct Instruction(bool Horizontal, bool Positive, int Amount = 0);
@@ -38,43 +78,5 @@ public class Day02 : IDay
         public ParseException(string message) : base($"Parse Error: [{message}]")
         {
         }
-    }
-
-    private static IEnumerable<Instruction> GetInstructions(string path)
-    {
-        return File.ReadLines(path).Select(line =>
-        {
-            var words = line.Split(' ');
-            Guard.Against.AgainstExpression(e => e.words.Length >= 2, (words, 0), nameof(words));
-            int amount = 0;
-            Guard.Against.AgainstExpression(e => int.TryParse(e.Item1, out amount), (words[1], 0),
-                $"{nameof(words)}[1]");
-            var result = words[0] switch
-                {
-                    "forward" => new Instruction(Horizontal: true, Positive: true),
-                    "backward" => new Instruction(Horizontal: true, Positive: false),
-                    "down" => new Instruction(Horizontal: false, Positive: true),
-                    "up" => new Instruction(Horizontal: false, Positive: false),
-                    _ => throw new ParseException(line)
-                } with
-                {
-                    Amount = amount
-                };
-            return result;
-        });
-    }
-
-    private void StepOne(string path)
-    {
-        Console.WriteLine("Step One: Parsing and aggregating input...");
-        var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionA(b));
-        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
-    }
-
-    private void StepTwo(string path)
-    {
-        Console.WriteLine("Step Two: Parsing and aggregating input...");
-        var pos = GetInstructions(path).Aggregate(new Position(), (a, b) => a.ApplyInstructionB(b));
-        Console.WriteLine($"Done! {pos}, Result: {pos.Forward * pos.Down}");
     }
 }

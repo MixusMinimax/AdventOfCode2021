@@ -1,18 +1,47 @@
 ﻿using System.Text;
 using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day05 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day05()
     {
         Steps = Common.CreateFileSteps(
             path => Step(path, false),
             path => Step(path, true)
         );
+    }
+
+    public IList<Func<string[], Task>> Steps { get; }
+
+    private static IEnumerable<(Coordinate From, Coordinate To)> GetLines(string path)
+    {
+        return File
+            .ReadLines(path)
+            .Select(e => e.Split("->")
+                .Select(x => x.Trim())
+                .Select(x => x.Split(',')
+                    .TryParseInt()
+                    .ToArray())
+                .Where(x => x.Length >= 2)
+                .Select(x => new Coordinate(x[0], x[1]))
+                .ToArray())
+            .Where(e => e.Length >= 2)
+            .Select(e => (From: e[0], To: e[1]));
+    }
+
+    private static void Step(string path, bool includeDiagonals)
+    {
+        Console.WriteLine("Parsing input and calculating map...");
+        Map map = new();
+        foreach (var (from, to) in GetLines(path)) map.MarkLine(@from, to, includeDiagonals);
+
+        Console.WriteLine("Done! Resulting map:\n");
+        Console.WriteLine(map);
+        Console.WriteLine($"\nNumber of high points: {map.HighPoints}");
     }
 
     private class Map
@@ -29,8 +58,8 @@ public class Day05 : IDay
             {
                 _size = new Coordinate
                 (
-                    X: Math.Max(_size.X, x + 1),
-                    Y: Math.Max(_size.Y, y + 1)
+                    Math.Max(_size.X, x + 1),
+                    Math.Max(_size.Y, y + 1)
                 );
                 if (!_values.ContainsKey(x)) _values[x] = new Dictionary<int, int>();
                 _values[x][y] = value;
@@ -89,35 +118,5 @@ public class Day05 : IDay
 
             return result.ToString();
         }
-    }
-
-    private static IEnumerable<(Coordinate From, Coordinate To)> GetLines(string path)
-    {
-        return File
-            .ReadLines(path)
-            .Select(e => e.Split("->")
-                .Select(x => x.Trim())
-                .Select(x => x.Split(',')
-                    .TryParseInt()
-                    .ToArray())
-                .Where(x => x.Length >= 2)
-                .Select(x => new Coordinate(x[0], x[1]))
-                .ToArray())
-            .Where(e => e.Length >= 2)
-            .Select(e => (From: e[0], To: e[1]));
-    }
-
-    private static void Step(string path, bool includeDiagonals)
-    {
-        Console.WriteLine("Parsing input and calculating map...");
-        Map map = new();
-        foreach (var (from, to) in GetLines(path))
-        {
-            map.MarkLine(from, to, includeDiagonals);
-        }
-
-        Console.WriteLine("Done! Resulting map:\n");
-        Console.WriteLine(map);
-        Console.WriteLine($"\nNumber of high points: {map.HighPoints}");
     }
 }

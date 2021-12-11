@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using advent_of_code.util;
+﻿using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day08 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day08()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static int ParseDigit(string segments)
     {

@@ -1,15 +1,17 @@
 ﻿using advent_of_code.util;
+using JetBrains.Annotations;
 
 namespace advent_of_code.days;
 
+[UsedImplicitly]
 public class Day09 : IDay
 {
-    public IList<Func<string[], Task>> Steps { get; }
-
     public Day09()
     {
         Steps = Common.CreateFileSteps(StepOne, StepTwo);
     }
+
+    public IList<Func<string[], Task>> Steps { get; }
 
     private static int[][] ParseInput(string path)
     {
@@ -32,20 +34,15 @@ public class Day09 : IDay
         var sum = 0;
 
         for (var y = 0; y < field.Length; ++y)
+        for (var x = 0; x < field[y].Length; ++x)
         {
-            for (var x = 0; x < field[y].Length; ++x)
-            {
-                var val = field[y][x];
-                var isLowSpot =
-                    val < (TryGetValue(field, x - 1, y) ?? 10) &&
-                    val < (TryGetValue(field, x + 1, y) ?? 10) &&
-                    val < (TryGetValue(field, x, y - 1) ?? 10) &&
-                    val < (TryGetValue(field, x, y + 1) ?? 10);
-                if (isLowSpot)
-                {
-                    sum += val + 1;
-                }
-            }
+            var val = field[y][x];
+            var isLowSpot =
+                val < (TryGetValue(field, x - 1, y) ?? 10) &&
+                val < (TryGetValue(field, x + 1, y) ?? 10) &&
+                val < (TryGetValue(field, x, y - 1) ?? 10) &&
+                val < (TryGetValue(field, x, y + 1) ?? 10);
+            if (isLowSpot) sum += val + 1;
         }
 
         Console.WriteLine($"Done! Risk: {sum}");
@@ -89,13 +86,11 @@ public class Day09 : IDay
         var basins = new List<(int X, int Y, int Size)>();
 
         for (var y = 0; y < field.Length; ++y)
+        for (var x = 0; x < field[y].Length; ++x)
         {
-            for (var x = 0; x < field[y].Length; ++x)
-            {
-                var val = field[y][x];
-                var basinSize = Traverse(field, traversed, x, y);
-                if (basinSize > 0) basins.Add((x, y, basinSize));
-            }
+            var val = field[y][x];
+            var basinSize = Traverse(field, traversed, x, y);
+            if (basinSize > 0) basins.Add((x, y, basinSize));
         }
 
         var top3Basins = basins
@@ -105,9 +100,7 @@ public class Day09 : IDay
 
         Console.WriteLine("Top 3 Basins:");
         foreach (var (basinX, basinY, basinSize) in top3Basins)
-        {
             Console.WriteLine($"  ({basinX,2}, {basinY,2}) => {basinSize,3}");
-        }
 
         Console.WriteLine($"Multiplied sizes: {top3Basins.Aggregate(1, (a, b) => a * b.Size)}");
     }
