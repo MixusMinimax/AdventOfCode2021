@@ -1,0 +1,9 @@
+﻿# Advent of Code 2021
+#### My Solutions to [AdventOfCode/2021](https://adventofcode.com/2021)
+
+Written in C#10, dotnet-6.0
+
+A lot of Linq, because it is cool to be able to implement large chunks of logic in a single statement.
+Useful? No. Fast? Not necessarily, but I did make sure to optimize what needed to be optimized (i.e. [Day 6](./days/Day06.cs)).
+
+This is my first time working with dotnet for real (ignoring Mono, especially since in Unity the language is very far behind).
