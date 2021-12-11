@@ -7,3 +7,5 @@ A lot of Linq, because it is cool to be able to implement large chunks of logic 
 Useful? No. Fast? Not necessarily, but I did make sure to optimize what needed to be optimized (i.e. [Day 6](./days/Day06.cs)).
 
 This is my first time working with dotnet for real (ignoring Mono, especially since in Unity the language is very far behind).
+
+This project uses Reflection to run only the code for the current day. If it is the 10th in the month, Day10.cs will be executed. Is this useful? Absolutely not. But I needed a reason to use Reflection somewhere in this project.
