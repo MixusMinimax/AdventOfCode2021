@@ -1,4 +1,6 @@
-﻿namespace advent_of_code.util;
+﻿using System.Collections;
+
+namespace advent_of_code.util;
 
 public static class Extensions
 {
@@ -23,6 +25,37 @@ public static class Extensions
     public static IEnumerable<int> TryParseInt(this IEnumerable<string> enumerable)
     {
         return enumerable.SelectWhere<string, int>(int.TryParse);
+    }
+
+    public static IEnumerable<Coordinate> TryParseCoordinates(this IEnumerable<string> enumerable, char delim = ',')
+    {
+        return enumerable.SelectWhere<string, Coordinate>((string line, out Coordinate coord) =>
+        {
+            var nums = line.Split(delim).TryParseInt().ToArray();
+            coord = default;
+            if (nums.Length < 2) return false;
+            coord.X = nums[0];
+            coord.Y = nums[1];
+            return true;
+        });
+    }
+
+    public static IEnumerable<TSource> TakeWhileAndSplit<TSource>(this IEnumerable<TSource> enumerable,
+        Predicate<TSource> predicate, IList<TSource> remainder)
+    {
+        var split = false;
+        foreach (var e in enumerable)
+        {
+            if (!split && predicate(e))
+            {
+                yield return e;
+            }
+            else
+            {
+                split = true;
+                remainder.Add(e);
+            }
+        }
     }
 
     public static IEnumerable<int> SplitNumbers(this string line, char delimiter = ',')

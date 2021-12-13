@@ -72,6 +72,19 @@ public static class Common
             .Cast<IDay>()
             .FirstOrDefault();
     }
+
+    public static T GetValueOrDefault<T>(this T[,] arr, int x, int y, T @default = default(T))
+    {
+        return x < 0 || x >= arr.GetLength(0) || y < 0 || y >= arr.GetLength(1)
+            ? @default
+            : arr[x, y];
+    }
 }
 
 public record struct Coordinate(int X, int Y);
+
+public enum Axis
+{
+    X,
+    Y
+}
