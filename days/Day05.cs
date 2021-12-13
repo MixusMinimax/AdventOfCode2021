@@ -37,7 +37,7 @@ public class Day05 : IDay
     {
         Console.WriteLine("Parsing input and calculating map...");
         Map map = new();
-        foreach (var (from, to) in GetLines(path)) map.MarkLine(@from, to, includeDiagonals);
+        foreach (var (from, to) in GetLines(path)) map.MarkLine(from, to, includeDiagonals);
 
         Console.WriteLine("Done! Resulting map:\n");
         Console.WriteLine(map);

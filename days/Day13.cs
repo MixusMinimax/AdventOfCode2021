@@ -52,10 +52,7 @@ public class Day13 : IDay
                 new Coordinate(Math.Max(size.X, coord.X + 1), Math.Max(size.Y, coord.Y + 1))
         );
         var holes = new bool[size.X, size.Y];
-        foreach (var (i, j) in coords)
-        {
-            holes[i, j] = true;
-        }
+        foreach (var (i, j) in coords) holes[i, j] = true;
 
         return (holes, foldInstructions, size);
     }
@@ -86,17 +83,15 @@ public class Day13 : IDay
             _ => new Coordinate(0, 0)
         };
         for (var y = 0; y < size.Y; ++y)
+        for (var x = 0; x < size.X; ++x)
         {
-            for (var x = 0; x < size.X; ++x)
+            var (xx, yy) = axis switch
             {
-                var (xx, yy) = axis switch
-                {
-                    Axis.X => (2 * where - x, y),
-                    Axis.Y => (x, 2 * where - y),
-                    _ => (0, 0)
-                };
-                holes[x, y] |= holes.GetValueOrDefault(xx, yy);
-            }
+                Axis.X => (2 * where - x, y),
+                Axis.Y => (x, 2 * where - y),
+                _ => (0, 0)
+            };
+            holes[x, y] |= holes.GetValueOrDefault(xx, yy);
         }
     }
 
@@ -108,12 +103,10 @@ public class Day13 : IDay
             Console.WriteLine("Too big to print!");
             return;
         }
+
         for (var y = 0; y < sy; ++y)
         {
-            for (var x = 0; x < sx; ++x)
-            {
-                Console.Write(holes[x, y] ? '#' : '.');
-            }
+            for (var x = 0; x < sx; ++x) Console.Write(holes[x, y] ? '#' : '.');
 
             Console.WriteLine();
         }
@@ -124,12 +117,8 @@ public class Day13 : IDay
         var (sx, sy) = size;
         var sum = 0;
         for (var y = 0; y < sy; ++y)
-        {
-            for (var x = 0; x < sx; ++x)
-            {
-                sum += holes[x, y] ? 1 : 0;
-            }
-        }
+        for (var x = 0; x < sx; ++x)
+            sum += holes[x, y] ? 1 : 0;
 
         return sum;
     }

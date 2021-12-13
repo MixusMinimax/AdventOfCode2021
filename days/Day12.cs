@@ -44,12 +44,9 @@ public class Day12 : IDay
     {
         var bigCaves = nodes.Where(e => e == e.ToUpper()).ToList();
         for (var from = 0; from < bigCaves.Count - 1; ++from)
-        {
-            for (var to = from + 1; to < bigCaves.Count; ++to)
-            {
-                if (edges[nodes.IndexOf(bigCaves[from]), nodes.IndexOf(bigCaves[to])]) return true;
-            }
-        }
+        for (var to = @from + 1; to < bigCaves.Count; ++to)
+            if (edges[nodes.IndexOf(bigCaves[@from]), nodes.IndexOf(bigCaves[to])])
+                return true;
 
         return false;
     }
@@ -66,17 +63,19 @@ public class Day12 : IDay
 
             var thisNode = nodes[startIndex];
 
-            IList<string[]> GetSubGraphs() =>
-            (
-                from subGraphs in
-                    from node in nodes
-                    where !visited.Contains(node)
-                    where edges[startIndex, nodes.IndexOf(node)]
-                    select GetPossiblePathsImpl(nodes, edges, nodes.IndexOf(node), endIndex,
-                        new HashSet<string>(visited), allowExtraVisit)
-                from subGraph in subGraphs
-                select subGraph.Prepend(thisNode).ToArray()
-            ).ToList();
+            IList<string[]> GetSubGraphs()
+            {
+                return (
+                    from subGraphs in
+                        from node in nodes
+                        where !visited.Contains(node)
+                        where edges[startIndex, nodes.IndexOf(node)]
+                        select GetPossiblePathsImpl(nodes, edges, nodes.IndexOf(node), endIndex,
+                            new HashSet<string>(visited), allowExtraVisit)
+                    from subGraph in subGraphs
+                    select subGraph.Prepend(thisNode).ToArray()
+                ).ToList();
+            }
 
             IList<string[]> result = new List<string[]>();
 
@@ -87,10 +86,7 @@ public class Day12 : IDay
                 allowExtraVisit = true;
             }
 
-            if (thisNode != thisNode.ToUpper())
-            {
-                visited.Add(nodes[startIndex]);
-            }
+            if (thisNode != thisNode.ToUpper()) visited.Add(nodes[startIndex]);
 
             return result.Concat(GetSubGraphs()).ToList();
         }

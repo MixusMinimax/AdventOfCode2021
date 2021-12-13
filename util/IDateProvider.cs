@@ -12,10 +12,10 @@ public class DefaultDateProvider : IDateProvider
 
 public class MockDateProvider : IDateProvider
 {
-    public DateTime Now { get; }
-
     public MockDateProvider(DateTime now)
     {
         Now = now;
     }
+
+    public DateTime Now { get; }
 }

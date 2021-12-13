@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace advent_of_code.util;
+﻿namespace advent_of_code.util;
 
 public static class Extensions
 {
@@ -29,7 +27,7 @@ public static class Extensions
 
     public static IEnumerable<Coordinate> TryParseCoordinates(this IEnumerable<string> enumerable, char delim = ',')
     {
-        return enumerable.SelectWhere<string, Coordinate>((string line, out Coordinate coord) =>
+        return enumerable.SelectWhere((string line, out Coordinate coord) =>
         {
             var nums = line.Split(delim).TryParseInt().ToArray();
             coord = default;
@@ -45,7 +43,6 @@ public static class Extensions
     {
         var split = false;
         foreach (var e in enumerable)
-        {
             if (!split && predicate(e))
             {
                 yield return e;
@@ -55,7 +52,6 @@ public static class Extensions
                 split = true;
                 remainder.Add(e);
             }
-        }
     }
 
     public static IEnumerable<int> SplitNumbers(this string line, char delimiter = ',')

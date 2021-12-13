@@ -73,7 +73,7 @@ public static class Common
             .FirstOrDefault();
     }
 
-    public static T GetValueOrDefault<T>(this T[,] arr, int x, int y, T @default = default(T))
+    public static T GetValueOrDefault<T>(this T[,] arr, int x, int y, T @default = default)
     {
         return x < 0 || x >= arr.GetLength(0) || y < 0 || y >= arr.GetLength(1)
             ? @default
