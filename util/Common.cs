@@ -58,6 +58,20 @@ public static class Common
     {
         return t?.ToString() ?? "null";
     }
+
+    public static IDay? GetCurrentDay(IDateProvider? dateProvider = null)
+    {
+        dateProvider ??= new DefaultDateProvider();
+        return typeof(IDay)
+            .Assembly
+            .ExportedTypes
+            .Where(e => typeof(IDay).IsAssignableFrom(e))
+            .Where(e => e.Name == $"Day{DateOnly.FromDateTime(dateProvider.Now).Day:D2}")
+            .Take(1)
+            .Select(Activator.CreateInstance)
+            .Cast<IDay>()
+            .FirstOrDefault();
+    }
 }
 
 public record struct Coordinate(int X, int Y);

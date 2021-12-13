@@ -1,22 +1,11 @@
 ﻿using advent_of_code.util;
 using Ardalis.GuardClauses;
 
-var day = typeof(IDay)
-    .Assembly
-    .ExportedTypes
-    .Where(e => typeof(IDay).IsAssignableFrom(e))
-    .Where(e => e.Name == $"Day{DateOnly.FromDateTime(DateTime.Now).Day:D2}")
-    .Take(1)
-    .Select(e =>
-    {
-        Console.WriteLine($"╔══════════════════╗\n║ Executing: {e.Name} ║\n╚══════════════════╝");
-        return e;
-    })
-    .Select(Activator.CreateInstance)
-    .Cast<IDay>()
-    .FirstOrDefault();
+var day = Common.GetCurrentDay();
 
 Guard.Against.Null(day, nameof(day));
+
+Console.WriteLine($"╔══════════════════╗\n║ Executing: {day.GetType().Name} ║\n╚══════════════════╝");
 
 var stepCount = day.Steps.Count;
 var step = 1;
