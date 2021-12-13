@@ -15,3 +15,17 @@ executed. Is this useful? Absolutely not. But I needed a reason to use Reflectio
 
 I decided to make this repository public since it is [allowed](https://adventofcode.com/2021/about#faq_streaming) to do so after the leaderboard of the day is full.
 This isn't a problem for me since the leaderboard is long full when I even wake up.
+
+### Example Usage
+
+```powershell
+# Run the first step of today with input from a file:
+dotnet run .\input\sample_input.txt
+dotnet run 1 .\input\sample_input.txt
+
+# Run the second step of today with input from a file:
+dotnet run 2 .\input\sample_input.txt
+
+# Run the third step of today with input from a file and extra input:
+dotnet run 3 .\input\sample_input.txt 69
+```
