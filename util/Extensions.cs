@@ -1,4 +1,6 @@
-﻿namespace advent_of_code.util;
+﻿using System.Collections;
+
+namespace advent_of_code.util;
 
 public static class Extensions
 {
@@ -54,9 +56,33 @@ public static class Extensions
             }
     }
 
+    public static IEnumerable<TSource> Split<TSource>(this IEnumerable<TSource> enumerable,
+        int amount, IList<TSource> remainder)
+    {
+        var i = 0;
+        foreach (var e in enumerable)
+        {
+            if (i < amount)
+                yield return e;
+            else
+                remainder.Add(e);
+            ++i;
+        }
+    }
+
     public static IEnumerable<int> SplitNumbers(this string line, char delimiter = ',')
     {
         return line.Split(delimiter).TryParseInt();
+    }
+
+    public static IEnumerable<(T Value, int Index)> Enumerate<T>(this IEnumerable<T> enumerable)
+    {
+        var i = 0;
+        foreach (var e in enumerable)
+        {
+            yield return (e, i);
+            ++i;
+        }
     }
 
     public static double Mean(this IEnumerable<int> numbers)

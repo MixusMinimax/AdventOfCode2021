@@ -37,16 +37,25 @@ public static class Common
         ).ToList();
     }
 
-    public static Action<string, string[]> RequireInt(Action<string, int> function, string name)
+    public static Action<string, string[]> RequireInt(Action<string, int> function, string name, int? @default = null)
     {
         return (path, args) =>
         {
             var result = 0;
-            Guard.Against.InvalidInput(args, name,
-                e => e.Length >= 1 && int.TryParse(e[0], out result),
+
+            bool TryParse(string[] e) => e.Length >= 1 && int.TryParse(e[0], out result) ||
+                                         Assign(@default is not null, @default ?? 0, out result);
+
+            Guard.Against.InvalidInput(args, name, TryParse,
                 $"Parameter [{name}: int] required!");
             function(path, result);
         };
+    }
+
+    public static TRet Assign<TRet, TOut>(TRet ret, TOut val, out TOut @out)
+    {
+        @out = val;
+        return ret;
     }
 
     public static void Swap<T>(ref T a, ref T b)

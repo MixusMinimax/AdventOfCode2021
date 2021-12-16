@@ -9,8 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.GuardClauses" Version="3.3.0"/>
-        <PackageReference Include="Humanizer.Core" Version="2.13.14"/>
+        <PackageReference Include="Ardalis.GuardClauses" Version="3.3.0" />
+        <PackageReference Include="Humanizer.Core" Version="2.13.14" />
+        <PackageReference Include="ShellProgressBar" Version="5.1.0" />
     </ItemGroup>
 
 </Project>
